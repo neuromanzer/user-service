@@ -1,7 +1,8 @@
 package com.neuro.userservice.service;
 
 import com.neuro.userservice.dto.UserDto;
+import com.neuro.userservice.wrapper.Response;
 
 public interface UserService {
-    void create(UserDto userDto);
+    Response create(UserDto userDto);
 }
