@@ -2,27 +2,33 @@ package com.neuro.userservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.neuro.userservice.validation.ValidateEmail;
+import com.neuro.userservice.validation.ValidatePassword;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
+@ValidatePassword
 public class UserDto {
     /**
-     * Имя пользователя
+     * имя пользователя
      */
     private String username;
     /**
-     * Пароль
+     * пароль пользователя
      */
     private String password;
     /**
-     * email
+     * повтор введенного пароля
+     */
+    private String matchedPassword;
+    /**
+     * email пользователя
      */
     @ValidateEmail
     private String email;
     /**
-     * birthdate
+     * дата рождения пользователя
      */
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate birthdate;

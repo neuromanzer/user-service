@@ -1,8 +1,6 @@
 package com.neuro.userservice.service;
 
 import com.neuro.userservice.dto.UserDto;
-import com.neuro.userservice.mapper.UserMapper;
-import com.neuro.userservice.model.User;
 import com.neuro.userservice.repository.UserRepository;
 import com.neuro.userservice.wrapper.Response;
 import com.neuro.userservice.wrapper.Violation;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
