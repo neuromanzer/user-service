@@ -1,6 +1,7 @@
 package com.neuro.userservice.service;
 
 import com.neuro.userservice.dto.UserDto;
+import com.neuro.userservice.mapper.UserMapper;
 import com.neuro.userservice.model.User;
 import com.neuro.userservice.repository.UserRepository;
 import com.neuro.userservice.wrapper.Response;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +27,7 @@ import static com.neuro.userservice.enums.Status.VALIDATION_ERROR;
 public class UserServiceImpl implements UserService {
 
     private final Validator validator;
+    //private final UserMapper userMapper;
     private final UserRepository userRepository;
 
     @Override
@@ -35,19 +38,19 @@ public class UserServiceImpl implements UserService {
             response.setStatus(EMPTY_REQUEST);
             return response;
         }
-        User user = new User();
-        List<Violation> violations = getViolations(user);
+        //User user = userMapper.toModel(userDto);
+        List<Violation> violations = getViolations(userDto);
         if (!violations.isEmpty()) {
             response.setStatus(VALIDATION_ERROR);
             response.setViolations(violations);
             return response;
         }
-        userRepository.save(user);
+        userRepository.save(null);
         return null;
     }
 
-    private List<Violation> getViolations(User user) {
-        Set<ConstraintViolation<User>> constraints = validator.validate(user);
+    private List<Violation> getViolations(UserDto user) {
+        Set<ConstraintViolation<UserDto>> constraints = validator.validate(user);
         List<Violation> violations = new ArrayList<>();
         if (!constraints.isEmpty()) {
             log.info("validation failed");

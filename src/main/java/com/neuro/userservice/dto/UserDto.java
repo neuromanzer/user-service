@@ -1,6 +1,7 @@
 package com.neuro.userservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.neuro.userservice.validation.ValidateEmail;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ public class UserDto {
     /**
      * email
      */
+    @ValidateEmail
     private String email;
     /**
      * birthdate
