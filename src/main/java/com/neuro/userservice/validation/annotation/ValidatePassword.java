@@ -1,4 +1,6 @@
-package com.neuro.userservice.validation;
+package com.neuro.userservice.validation.annotation;
+
+import com.neuro.userservice.validation.PasswordValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

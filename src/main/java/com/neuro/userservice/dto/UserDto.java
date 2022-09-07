@@ -1,8 +1,8 @@
 package com.neuro.userservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.neuro.userservice.validation.ValidateEmail;
-import com.neuro.userservice.validation.ValidatePassword;
+import com.neuro.userservice.validation.annotation.ValidateEmail;
+import com.neuro.userservice.validation.annotation.ValidatePassword;
 import lombok.Data;
 
 import java.time.LocalDate;

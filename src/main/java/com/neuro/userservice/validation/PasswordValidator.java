@@ -1,6 +1,7 @@
 package com.neuro.userservice.validation;
 
 import com.neuro.userservice.dto.UserDto;
+import com.neuro.userservice.validation.annotation.ValidatePassword;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

@@ -1,5 +1,7 @@
 package com.neuro.userservice.validation;
 
+import com.neuro.userservice.validation.annotation.ValidateEmail;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
