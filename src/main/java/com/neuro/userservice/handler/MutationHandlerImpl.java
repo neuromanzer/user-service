@@ -30,6 +30,7 @@ public class MutationHandlerImpl implements MutationHandler {
             response.setStatus(EMPTY_REQUEST);
             return response;
         }
+        response.setDto(userDto);
         List<Violation> violations = validationService.getViolations(userDto);
         if (!violations.isEmpty()) {
             response.setStatus(VALIDATION_ERROR);
