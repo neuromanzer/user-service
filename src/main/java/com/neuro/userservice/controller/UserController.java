@@ -1,6 +1,7 @@
 package com.neuro.userservice.controller;
 
 import com.neuro.userservice.dto.UserDto;
+import com.neuro.userservice.model.User;
 import com.neuro.userservice.service.UserService;
 import com.neuro.userservice.wrapper.Response;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -43,8 +46,9 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/read")
-    public void read() {
-        userService.getAll();
+    @GetMapping("/getAll")
+    public ResponseEntity<List<User>> getAll() {
+        List<User> users = userService.getAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 }

@@ -26,6 +26,7 @@ public class ValidationServiceImpl implements ValidationService {
     public Response validate(UserDto userDto) {
         Response response = new Response();
         response.setDto(userDto);
+        response.setViolations(new ArrayList<>());
         Set<ConstraintViolation<UserDto>> constraints = validator.validate(userDto);
         List<Violation> violations = new ArrayList<>();
         if (!constraints.isEmpty()) {
@@ -38,11 +39,10 @@ public class ValidationServiceImpl implements ValidationService {
                         .value(x.getInvalidValue())
                         .build());
             });
-            if (!violations.isEmpty()) {
-                response.setStatus(VALIDATION_ERROR);
-                response.setViolations(violations);
-                return response;
-            }
+        }
+        if (!violations.isEmpty()) {
+            response.setStatus(VALIDATION_ERROR);
+            response.setViolations(violations);
         }
         return response;
     }
