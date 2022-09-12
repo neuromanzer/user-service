@@ -1,6 +1,7 @@
 package com.neuro.userservice.validation;
 
 import com.neuro.userservice.dto.UserDto;
+import com.neuro.userservice.wrapper.Response;
 import com.neuro.userservice.wrapper.Violation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static com.neuro.userservice.enums.Status.VALIDATION_ERROR;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -20,7 +23,9 @@ public class ValidationServiceImpl implements ValidationService {
     private final Validator validator;
 
     @Override
-    public List<Violation> getViolations(UserDto userDto) {
+    public Response validate(UserDto userDto) {
+        Response response = new Response();
+        response.setDto(userDto);
         Set<ConstraintViolation<UserDto>> constraints = validator.validate(userDto);
         List<Violation> violations = new ArrayList<>();
         if (!constraints.isEmpty()) {
@@ -33,8 +38,12 @@ public class ValidationServiceImpl implements ValidationService {
                         .value(x.getInvalidValue())
                         .build());
             });
-            return violations;
+            if (!violations.isEmpty()) {
+                response.setStatus(VALIDATION_ERROR);
+                response.setViolations(violations);
+                return response;
+            }
         }
-        return violations;
+        return response;
     }
 }

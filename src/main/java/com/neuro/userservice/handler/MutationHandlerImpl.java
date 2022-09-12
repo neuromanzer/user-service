@@ -1,3 +1,4 @@
+/*
 package com.neuro.userservice.handler;
 
 import com.neuro.userservice.dto.UserDto;
@@ -46,3 +47,4 @@ public class MutationHandlerImpl implements MutationHandler {
         return null;
     }
 }
+*/

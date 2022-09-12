@@ -7,7 +7,7 @@ import com.neuro.userservice.wrapper.Response;
 import java.util.List;
 
 public interface UserService {
-    User create(User user);
+    Response create(UserDto userDto);
     Response update(Long id, UserDto userDto);
     Response delete(Long id);
     List<User> getAll();
