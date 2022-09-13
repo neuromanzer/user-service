@@ -1,12 +1,14 @@
 package com.neuro.userservice.service;
 
 import com.neuro.userservice.dto.UserDto;
+import com.neuro.userservice.event.OnRegistrationCompleteEvent;
 import com.neuro.userservice.model.User;
 import com.neuro.userservice.repository.UserRepository;
 import com.neuro.userservice.validation.ValidationService;
 import com.neuro.userservice.wrapper.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ValidationService validationService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -32,6 +35,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         userRepository.save(user);
         response.setStatus(USER_CREATED);
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, null, null));
         return response;
     }
 

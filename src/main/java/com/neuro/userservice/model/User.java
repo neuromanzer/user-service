@@ -2,6 +2,7 @@ package com.neuro.userservice.model;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,4 +20,7 @@ public class User {
     private String username;
     private String password;
     private String matchedPassword;
+    private String email;
+    @Column(name = "enabled")
+    private Boolean enabled;
 }
