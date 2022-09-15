@@ -8,6 +8,6 @@ import lombok.Data;
 public class Email {
     private String email;
     private String appUrl;
-    private String token;
+    private String subject;
     private String message;
 }

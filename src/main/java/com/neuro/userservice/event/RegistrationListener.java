@@ -30,12 +30,13 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         Email email = Email
                 .builder()
                 .email(event.getUser().getEmail())
-                .appUrl("url")
-                .token(token)
-                .message("")
+                .appUrl(event.getAppUrl() + "/registrationConfirm?token=" + token)
+                .subject("Registration")
+                .message("Welcome to the void....")
                 .build();
         HttpEntity<Email> request = new HttpEntity<>(email);
         ResponseEntity<Email> response = restTemplate.exchange("http://localhost:8081/api/sendEmail", HttpMethod.POST, request, Email.class);
+        System.out.printf("");
     }
 
 }

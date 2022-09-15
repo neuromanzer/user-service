@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Slf4j
@@ -28,9 +29,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<Response> create(@RequestBody UserDto userDto) {
+    public ResponseEntity<Response> create(@RequestBody UserDto userDto, HttpServletRequest request) {
         log.info("userDto: {}", userDto);
-        Response response = userService.create(userDto);
+        Response response = userService.create(userDto, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

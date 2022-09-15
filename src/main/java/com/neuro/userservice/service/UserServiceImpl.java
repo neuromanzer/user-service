@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -29,14 +31,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Response create(UserDto userDto) {
+    public Response create(UserDto userDto, HttpServletRequest request) {
         Response response = validationService.validate(userDto);
         if (!response.getViolations().isEmpty()) return response;
-        User user = new User();
+        User user = createUser(userDto);
         userRepository.save(user);
         response.setStatus(USER_CREATED);
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, null, null));
+        String appUrl = ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).build().toString();
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, appUrl));
         return response;
+    }
+
+    //TODO поменять на маппер
+    private User createUser(UserDto userDto) {
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
+        user.setMatchedPassword(userDto.getMatchedPassword());
+        user.setEnabled(false);
+        return user;
     }
 
     @Override
