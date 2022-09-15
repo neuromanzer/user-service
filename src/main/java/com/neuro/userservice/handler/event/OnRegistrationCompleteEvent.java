@@ -1,4 +1,4 @@
-package com.neuro.userservice.event;
+package com.neuro.userservice.handler.event;
 
 import com.neuro.userservice.model.User;
 import lombok.Data;

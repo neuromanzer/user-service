@@ -1,7 +1,7 @@
 package com.neuro.userservice.service;
 
 import com.neuro.userservice.dto.UserDto;
-import com.neuro.userservice.event.OnRegistrationCompleteEvent;
+import com.neuro.userservice.handler.event.OnRegistrationCompleteEvent;
 import com.neuro.userservice.model.User;
 import com.neuro.userservice.repository.UserRepository;
 import com.neuro.userservice.validation.ValidationService;
