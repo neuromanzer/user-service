@@ -19,4 +19,9 @@ public class TokenServiceImpl implements TokenService {
         verificationToken.setToken(token);
         verificationTokenRepository.save(verificationToken);
     }
+
+    @Override
+    public VerificationToken findByToken(String token) {
+        return verificationTokenRepository.findByToken(token);
+    }
 }
