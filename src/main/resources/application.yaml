@@ -1,13 +1,11 @@
 server:
   port : 8080
 spring:
-  h2:
-    console.enabled: true
   datasource:
-    url: jdbc:h2:file:D:/data/user-db
-    username: sa
-    password: pass
-    driverClassName: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: userdb
+    driverClassName: org.postgresql.Driver
   jpa:
     spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
