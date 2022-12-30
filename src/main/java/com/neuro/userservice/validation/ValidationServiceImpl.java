@@ -23,22 +23,19 @@ public class ValidationServiceImpl implements ValidationService {
     private final Validator validator;
 
     @Override
-    public Response validate(UserDto userDto) {
-        Response response = new Response();
+    public Response validate(UserDto userDto, Response response) {
         response.setDto(userDto);
         response.setViolations(new ArrayList<>());
         Set<ConstraintViolation<UserDto>> constraints = validator.validate(userDto);
         List<Violation> violations = new ArrayList<>();
         if (!constraints.isEmpty()) {
             log.info("validation failed");
-            constraints.forEach(x -> {
-                violations.add(Violation.builder()
-                        .className(x.getRootBeanClass().getSimpleName())
-                        .propertyName(x.getPropertyPath().toString())
-                        .message(x.getMessage())
-                        .value(x.getInvalidValue())
-                        .build());
-            });
+            constraints.forEach(x -> violations.add(Violation.builder()
+                    .className(x.getRootBeanClass().getSimpleName())
+                    .propertyName(x.getPropertyPath().toString())
+                    .message(x.getMessage())
+                    .value(x.getInvalidValue())
+                    .build()));
         }
         if (!violations.isEmpty()) {
             response.setStatus(VALIDATION_ERROR);

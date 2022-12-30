@@ -32,7 +32,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Response create(UserDto userDto, HttpServletRequest request) {
-        Response response = validationService.validate(userDto);
+        Response response = createResponse(userDto);
+        if (userRepository.existsUserByEmail(userDto.getEmail())) {
+            response.setStatus(USER_ALREADY_EXISTS);
+            return response;
+        }
+        response = validationService.validate(userDto, response);
         if (!response.getViolations().isEmpty()) return response;
         User user = createUser(userDto);
         userRepository.save(user);
@@ -42,20 +47,10 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
-    //TODO поменять на маппер
-    private User createUser(UserDto userDto) {
-        User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setMatchedPassword(userDto.getMatchedPassword());
-        user.setEnabled(false);
-        return user;
-    }
-
     @Override
     public Response update(Long id, UserDto userDto) {
-        Response response = validationService.validate(userDto);
+        Response response = createResponse(userDto);
+        response = validationService.validate(userDto, response);
         if (!response.getViolations().isEmpty()) return response;
         Optional<User> userFromDb = userRepository.findById(id);
         if (!userFromDb.isPresent()) {
@@ -84,5 +79,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
+    }
+
+    private Response createResponse(UserDto userDto) {
+        Response response = new Response();
+        response.setDto(userDto);
+        return response;
+    }
+
+    //TODO поменять на маппер
+    private User createUser(UserDto userDto) {
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
+        user.setMatchedPassword(userDto.getMatchedPassword());
+        user.setEnabled(false);
+        return user;
     }
 }

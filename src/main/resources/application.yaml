@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
+    username: neuro
     password: userdb
     driverClassName: org.postgresql.Driver
   jpa:
@@ -12,3 +12,7 @@ spring:
       ddl-auto: update
   jackson:
     date-format: yyyy-MM-dd
+
+email:
+  service:
+    url: "http://localhost:8081/api/sendEmail"
