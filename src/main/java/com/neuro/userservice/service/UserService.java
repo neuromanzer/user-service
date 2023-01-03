@@ -15,4 +15,6 @@ public interface UserService {
     Response delete(Long id);
 
     List<UserDto> getAll();
+
+    void saveRegisteredUser(User user);
 }

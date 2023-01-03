@@ -7,4 +7,6 @@ public interface TokenService {
     void createVerificationToken(User user, String token);
 
     VerificationToken findByToken(String token);
+
+    void validateToken(String token);
 }

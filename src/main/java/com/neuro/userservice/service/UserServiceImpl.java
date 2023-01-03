@@ -45,11 +45,7 @@ public class UserServiceImpl implements UserService {
         User user = mapper.toModel(userDto);
         String appUrl = ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).build().toString();
         try {
-            try {
-                userRepository.save(user);
-            } catch (Exception e) {
-                return response;
-            }
+            userRepository.save(user);
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, appUrl));
             response.setStatus(USER_CREATED);
             return response;
@@ -97,6 +93,11 @@ public class UserServiceImpl implements UserService {
             userDtos.add(userDto);
         });
         return userDtos;
+    }
+
+    @Override
+    public void saveRegisteredUser(User user) {
+        userRepository.save(user);
     }
 
     private Response createResponse(UserDto userDto) {
