@@ -3,6 +3,7 @@ package com.neuro.userservice.enums;
 public enum Status {
     EMPTY_REQUEST("Empty request"),
     USER_CREATED("User created"),
+    EMAIL_SERVICE_NOT_AVAILABLE("Email service is not available"),
     USER_ALREADY_EXISTS("Пользователь с таким email уже существует"),
     USER_UPDATED("User updated"),
     USER_NOT_FOUND("User not found"),

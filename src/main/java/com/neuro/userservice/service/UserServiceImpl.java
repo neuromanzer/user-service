@@ -2,6 +2,7 @@ package com.neuro.userservice.service;
 
 import com.neuro.userservice.dto.UserDto;
 import com.neuro.userservice.handler.event.OnRegistrationCompleteEvent;
+import com.neuro.userservice.mapper.UserMapper;
 import com.neuro.userservice.model.User;
 import com.neuro.userservice.repository.UserRepository;
 import com.neuro.userservice.validation.ValidationService;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +27,7 @@ import static com.neuro.userservice.enums.Status.*;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final UserMapper mapper;
     private final UserRepository userRepository;
     private final ValidationService validationService;
     private final ApplicationEventPublisher eventPublisher;
@@ -39,12 +42,21 @@ public class UserServiceImpl implements UserService {
         }
         response = validationService.validate(userDto, response);
         if (!response.getViolations().isEmpty()) return response;
-        User user = createUser(userDto);
-        userRepository.save(user);
-        response.setStatus(USER_CREATED);
+        User user = mapper.toModel(userDto);
         String appUrl = ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).build().toString();
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, appUrl));
-        return response;
+        try {
+            try {
+                userRepository.save(user);
+            } catch (Exception e) {
+                return response;
+            }
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, appUrl));
+            response.setStatus(USER_CREATED);
+            return response;
+        } catch (Exception e) {
+            response.setStatus(EMAIL_SERVICE_NOT_AVAILABLE);
+            return response;
+        }
     }
 
     @Override
@@ -77,24 +89,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public List<UserDto> getAll() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+        users.forEach(user -> {
+            UserDto userDto = mapper.toDto(user);
+            userDtos.add(userDto);
+        });
+        return userDtos;
     }
 
     private Response createResponse(UserDto userDto) {
         Response response = new Response();
         response.setDto(userDto);
         return response;
-    }
-
-    //TODO поменять на маппер
-    private User createUser(UserDto userDto) {
-        User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setMatchedPassword(userDto.getMatchedPassword());
-        user.setEnabled(false);
-        return user;
     }
 }

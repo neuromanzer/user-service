@@ -30,7 +30,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         this.confirmRegistration(event);
     }
 
-    private void confirmRegistration(OnRegistrationCompleteEvent event) throws Exception {
+    private void confirmRegistration(OnRegistrationCompleteEvent event) {
         String token = UUID.randomUUID().toString();
         tokenService.createVerificationToken(event.getUser(), token);
         Email email = Email
@@ -41,10 +41,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
                 .message("Welcome to the void....")
                 .build();
         HttpEntity<Email> request = new HttpEntity<>(email);
-        try {
-            restTemplate.exchange(url, HttpMethod.POST, request, Email.class);
-        } catch (Exception e) {
-            throw new Exception("Сервис отправки email не работает");
-        }
+        restTemplate.exchange(url, HttpMethod.POST, request, Email.class);
     }
 }
