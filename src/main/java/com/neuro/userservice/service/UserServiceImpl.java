@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,12 +37,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Response create(UserDto userDto, HttpServletRequest request) {
         Response response = createResponse(userDto);
+        response = validationService.validate(userDto, response);
+        if (!ObjectUtils.isEmpty(response.getViolations())) {
+            response.setStatus(VALIDATION_ERROR);
+            return response;
+        }
         if (userRepository.existsUserByEmail(userDto.getEmail())) {
             response.setStatus(USER_ALREADY_EXISTS);
             return response;
         }
-        response = validationService.validate(userDto, response);
-        if (!response.getViolations().isEmpty()) return response;
         User user = mapper.toModel(userDto);
         String appUrl = ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).build().toString();
         try {
